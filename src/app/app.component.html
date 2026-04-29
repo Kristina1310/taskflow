@@ -1,0 +1,35 @@
+<ng-container *ngIf="!(loading$ | async); else spinner">
+  <!-- Auth layout (no sidebar/navbar) -->
+  <ng-container *ngIf="isAuthRoute(); else appShell">
+    <router-outlet></router-outlet>
+  </ng-container>
+
+  <!-- App shell with sidebar + navbar -->
+  <ng-template #appShell>
+    <ng-container *ngIf="isLoggedIn$ | async; else authOnly">
+      <div class="flex h-screen overflow-hidden bg-slate-50">
+        <app-sidebar></app-sidebar>
+        <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+          <app-navbar></app-navbar>
+          <main class="flex-1 overflow-y-auto p-6 scrollbar-thin">
+            <router-outlet></router-outlet>
+          </main>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #authOnly>
+      <router-outlet></router-outlet>
+    </ng-template>
+  </ng-template>
+</ng-container>
+
+<ng-template #spinner>
+  <div class="min-h-screen flex items-center justify-center bg-slate-50">
+    <div class="flex flex-col items-center gap-4">
+      <div class="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin"></div>
+      <p class="text-sm text-slate-500 font-medium">Loading TaskFlow…</p>
+    </div>
+  </div>
+</ng-template>
+
+<app-toast-container></app-toast-container>
